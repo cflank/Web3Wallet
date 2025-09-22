@@ -1,0 +1,79 @@
+[package]
+name = "web3wallet-cli"
+version = "1.0.0"
+edition = "2021"
+authors = ["Web3Wallet Team"]
+description = "A secure, professional-grade Web3 wallet CLI tool for Ethereum address generation and management"
+license = "MIT"
+repository = "https://github.com/user/web3wallet-cli"
+keywords = ["web3", "ethereum", "wallet", "cli", "crypto"]
+categories = ["command-line-utilities", "cryptography"]
+
+[[bin]]
+name = "wallet"
+path = "src/main.rs"
+
+[dependencies]
+# Core Web3 functionality
+ethers = { version = "2.0", features = ["ws", "rustls"] }
+bip39 = "2.0"
+
+# CLI framework
+clap = { version = "4.0", features = ["derive", "cargo"] }
+
+# Cryptography
+aes-gcm = "0.10"
+pbkdf2 = "0.12"
+argon2 = "0.5"
+zeroize = { version = "1.6", features = ["derive"] }
+rand = "0.8"
+hex = "0.4"
+
+# Async runtime
+tokio = { version = "1.0", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# User input
+rpassword = "7.0"
+
+# Error handling and utilities
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# File system utilities
+dirs = "5.0"
+
+# Time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+[dev-dependencies]
+# Testing
+tokio-test = "0.4"
+tempfile = "3.0"
+assert_cmd = "2.0"
+predicates = "3.0"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+incremental = false
+
+[profile.dev]
+opt-level = 0
+debug = true
+panic = "unwind"
+
+# Security-focused configuration
+[profile.release.package."*"]
+opt-level = 3
+debug = false

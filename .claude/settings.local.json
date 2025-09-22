@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__graphiti__add_memory",
+      "mcp__graphiti__search_memory_facts",
+      "mcp__graphiti__search_memory_nodes",
+      "WebSearch",
+      "Bash(powershell:*)",
+      "Bash(cargo check:*)",
+      "Bash(timeout 60 cargo check --quiet)",
+      "Bash(cargo test)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "graphiti"
+  ]
+}
