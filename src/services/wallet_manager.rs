@@ -2,9 +2,9 @@
 //!
 //! High-level wallet management service that coordinates all wallet operations.
 
-use crate::errors::{CryptographicError, WalletResult};
+use crate::errors::{WalletResult};
 use crate::models::{Address, Wallet};
-use crate::services::mnemonic::MnemonicService;
+use crate::services::{crypto::CryptoService, mnemonic::MnemonicService};
 use crate::WalletConfig;
 use std::path::Path;
 
@@ -48,27 +48,30 @@ impl WalletManager {
         )
     }
 
-    /// Save wallet to encrypted file (placeholder)
+    /// Save wallet to encrypted file
     pub async fn save_wallet(
         &self,
-        _wallet: &Wallet,
-        _path: &Path,
-        _password: &str,
+        wallet: &Wallet,
+        path: &Path,
+        password: &str,
     ) -> WalletResult<()> {
-        // TODO: Implement encryption and file saving
-        Err(CryptographicError::KdfFailed {
-            details: "Wallet saving not yet implemented".to_string(),
-        }
-        .into())
+        // Validate password strength
+        CryptoService::validate_password(password)?;
+
+        // Encrypt wallet data using Argon2id
+        let keystore = CryptoService::encrypt_wallet(wallet, password, true)?;
+
+        // Save keystore to file
+        CryptoService::save_keystore(&keystore, path).await
     }
 
-    /// Load wallet from encrypted file (placeholder)
-    pub async fn load_wallet(&self, _path: &Path, _password: &str) -> WalletResult<Wallet> {
-        // TODO: Implement file loading and decryption
-        Err(CryptographicError::DecryptionFailed {
-            context: "Wallet loading not yet implemented".to_string(),
-        }
-        .into())
+    /// Load wallet from encrypted file
+    pub async fn load_wallet(&self, path: &Path, password: &str) -> WalletResult<Wallet> {
+        // Load keystore from file
+        let keystore = CryptoService::load_keystore(path).await?;
+
+        // Decrypt and return wallet
+        CryptoService::decrypt_wallet(&keystore, password)
     }
 
     /// Derive address from wallet

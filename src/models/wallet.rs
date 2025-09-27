@@ -136,7 +136,7 @@ impl Wallet {
             }
             .into());
         }
-
+        
         // Get entropy bits for word count
         let entropy_bits = config::entropy_bits_for_word_count(word_count).unwrap();
 

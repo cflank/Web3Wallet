@@ -8,7 +8,8 @@
       "Bash(powershell:*)",
       "Bash(cargo check:*)",
       "Bash(timeout 60 cargo check --quiet)",
-      "Bash(cargo test)"
+      "Bash(cargo test)",
+      "Bash(cargo:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

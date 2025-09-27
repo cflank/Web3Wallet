@@ -13,7 +13,7 @@ cognitive-complexity-threshold = 30
 type-complexity-threshold = 250
 
 # Documentation requirements
-missing-docs-in-private-items = false
+missing-docs-in-crate-items = false
 doc-valid-idents = [
     "BIP39", "BIP44", "HD", "MetaMask", "AES", "GCM", "PBKDF2", "Argon2",
     "JSON", "CLI", "API", "OS", "URL", "URI", "UUID", "UTF8", "ASCII",
@@ -32,7 +32,7 @@ enum-variant-name-threshold = 3
 
 # Vector and collection limits
 vec-box-size-threshold = 4096
-large-types-passed-by-value = 256
+pass-by-value-size-limit = 256
 
 # Performance thresholds
 trivial-copy-size-limit = 128
@@ -49,4 +49,4 @@ disallowed-methods = [
 ]
 
 # Allow certain patterns needed for crypto operations
-single-char-lifetime-names = true
+single-char-binding-names-threshold = 4

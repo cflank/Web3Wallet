@@ -36,6 +36,14 @@ pub enum WalletError {
     /// Feature not yet implemented
     #[error("Feature not implemented: {0}")]
     NotImplemented(String),
+
+    /// I/O operation failures
+    #[error("I/O error: {0}")]
+    Io(String),
+
+    /// JSON serialization/deserialization failures
+    #[error("JSON error: {0}")]
+    Json(String),
 }
 
 /// Cryptographic operation errors (CRYPTO_xxx)
@@ -420,6 +428,8 @@ impl WalletError {
             WalletError::Network(err) => err.code(),
             WalletError::Validation(err) => err.code(),
             WalletError::NotImplemented(_) => "NOT_IMPLEMENTED",
+            WalletError::Io(_) => "IO_ERROR",
+            WalletError::Json(_) => "JSON_ERROR",
         }
     }
 
@@ -433,6 +443,8 @@ impl WalletError {
             WalletError::Network(err) => err.suggestion(),
             WalletError::Validation(err) => err.suggestion(),
             WalletError::NotImplemented(_) => Some("This feature is not yet implemented. Please check for updates or contribute to the project.".to_string()),
+            WalletError::Io(_) => Some("Check file permissions and disk space.".to_string()),
+            WalletError::Json(_) => Some("Verify data format and structure.".to_string()),
         }
     }
 }
@@ -486,3 +498,16 @@ impl_error_traits!(UserInputError, "INPUT");
 impl_error_traits!(AuthenticationError, "AUTH");
 impl_error_traits!(NetworkError, "NETWORK");
 impl_error_traits!(ValidationError, "VALIDATION");
+
+// Implement From traits for standard library errors
+impl From<std::io::Error> for WalletError {
+    fn from(err: std::io::Error) -> Self {
+        WalletError::Io(err.to_string())
+    }
+}
+
+impl From<serde_json::Error> for WalletError {
+    fn from(err: serde_json::Error) -> Self {
+        WalletError::Json(err.to_string())
+    }
+}
